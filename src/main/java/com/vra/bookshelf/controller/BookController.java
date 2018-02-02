@@ -32,14 +32,10 @@ public class BookController {
                          Model model) {
         List<String> search = new ArrayList<String>();
         search.add(s);
-        System.out.println(isRead);
-        System.out.println(after);
-        System.out.println(before);
-
-
         search.add(isRead);
         search.add(after);
         search.add(before);
+
         model.addAttribute("books", bookService.findBook(search));
         model.addAttribute("pid", pid);
         model.addAttribute("currPage", pid);

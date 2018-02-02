@@ -13,7 +13,7 @@ public class BookServiceImpl implements BookService {
     @Autowired
     public BookDao bookDao;
 
-    // 10 страниц, в зависимости от pid-(Page id)
+    // 10 книг, в зависимости от pid-(Page id)
     public List<BookshelfEntity> getListBookByPid(int pid) {
         return bookDao.getListBookByPid(pid);
     }
@@ -23,10 +23,12 @@ public class BookServiceImpl implements BookService {
         return bookDao.getListBook();
     }
 
+    //количество страниц для пейджинга
     public int getCountOfPages() {
         return (int)(Math.ceil(bookDao.getCountOfRecords()/10));
     }
 
+    //сделать прочитанной
     public void changeReadAlready(Integer id) {
         bookDao.toDoIsRead(id);
     }

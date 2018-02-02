@@ -78,9 +78,8 @@
             <option th:id="isRead" th:name="isRead" value="false">Нет</option>
         </select>
         <label style="font-size: small" >Год издания</label>
-        <input th:id="after" type="number" th:name="after" placeholder="После" th:default="0">
-        <input th:id="before" type="number" th:name="before" placeholder="До" th:default="3000">
-
+        <input th:id="after" type="number" th:name="after" placeholder="После" th:min="0" th:default="0">
+        <input th:id="before" type="number" th:name="before" placeholder="До" th:max="2050" th:default="2050">
 
         <div>
             <input type="submit" value="Найти"/>
@@ -88,7 +87,6 @@
     </form>
 
 </td>
-
 
 <div>
     <table>
@@ -142,7 +140,7 @@
     <!--/*@thymesVar id="book" type="com.vra.bookshelf.entity.BookshelfEntity"*/-->
     <form action="#" th:action="@{'/books/addBook'+${pid}}" th:object="${book}" method="post">
         <div>
-            <label th:for="id">ID</label>
+            <!--<label th:for="id">ID</label>-->
             <input id="id" type="hidden" name="id" th:field="${book.id}"/>
             <span class="error1" th:if="${#fields.hasErrors('id')}" th:each="err : ${#fields.errors('id')}"
                   th:text="${err}">Input is incorrect</span>

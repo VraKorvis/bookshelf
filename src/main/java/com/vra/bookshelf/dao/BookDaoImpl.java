@@ -24,8 +24,7 @@ public class BookDaoImpl implements BookDao {
     @SuppressWarnings("unchecked")
     public List<BookshelfEntity> getListBook() {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
-        List<BookshelfEntity> list = session.createQuery("FROM BookshelfEntity").list();
-        return list;
+        return (List<BookshelfEntity>) session.createQuery("FROM BookshelfEntity").list();
     }
 
     //ВАЖНО!!! "Do not use the session-per-operation antipattern:
@@ -64,11 +63,10 @@ public class BookDaoImpl implements BookDao {
     // возможно неправильный способ!!!см. update
     public void addBook(BookshelfEntity book) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
-        Transaction tx = null;
-        Integer bookID = null;
-        bookID = (Integer) session.save(book);
 
-        tx = session.beginTransaction();
+        Integer bookID = (Integer) session.save(book);
+
+        Transaction tx = session.beginTransaction();
         session.flush();
         tx.commit();
         logger.info("Book was successfully added: " + book);
@@ -77,9 +75,7 @@ public class BookDaoImpl implements BookDao {
     public void updateBook(BookshelfEntity book) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
 
-        Transaction tx = null;
-        BookshelfEntity bk = (BookshelfEntity) session.load(BookshelfEntity.class, book.getId());
-
+        BookshelfEntity bk = session.load(BookshelfEntity.class, book.getId());
         bk.setId(book.getId());
         bk.setTitle(book.getTitle());
         bk.setDescription(book.getDescription());
@@ -88,7 +84,7 @@ public class BookDaoImpl implements BookDao {
         bk.setIsbn(book.getIsbn());
 
         //session.update(book); // не требуется вероятно
-        tx = session.beginTransaction();
+        Transaction tx = session.beginTransaction();
         session.flush();
         tx.commit();
 
@@ -99,13 +95,11 @@ public class BookDaoImpl implements BookDao {
     public void toDoIsRead(Integer id) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
 
-        Transaction tx = null;
-        BookshelfEntity bk = (BookshelfEntity) session.load(BookshelfEntity.class, id);
-
+        BookshelfEntity bk = session.load(BookshelfEntity.class, id);
         bk.setReadAlready(true);
 
         //session.update(book); // не требуется вероятно
-        tx = session.beginTransaction();
+        Transaction tx = session.beginTransaction();
         session.flush();
         tx.commit();
 
@@ -120,44 +114,34 @@ public class BookDaoImpl implements BookDao {
         final String isRead = search.get(1);
         final int after = Integer.parseInt(search.get(2));
         final int before = Integer.parseInt(search.get(3));
-
         StringBuilder hql = new StringBuilder("FROM BookshelfEntity where year between :after and :before ");
 
-        // Query wqq = session.createQuery("FROM BookshelfEntity where year between :after and :before and readAlready=:tr and title=:text");
-        boolean isR;
-        if (!isRead.equals("e")) {
-            isR = Boolean.valueOf(isRead);
-            if (text.equals("")) {
-                hql.append("and readAlready=:isR");
-            } else {
-                hql.append("and readAlready=:isR and title=:text");
-            }
-        } else {
-            if (!text.equals("")) {
-                hql.append("and title=:text");
-            }
+        if (!isRead.equals("e")){
+            hql.append("and readAlready=:isR");
         }
-
+        if (!text.equals("")){
+            hql.append("and title=:text");
+        }
         Query query = session.createQuery(hql.toString());
         query.setParameter("before", before);
         query.setParameter("after", after);
-
         if (!text.equals("")){
             query.setParameter("text", text);
         }
         if (!isRead.equals("e")){
-            isR = Boolean.valueOf(isRead);
+           boolean isR = Boolean.valueOf(isRead);
             query.setParameter("isR", isR);
         }
 
         List<BookshelfEntity> list = query.getResultList();
 
-        for (int i = 0; i < list.size(); i++) {
-            logger.info(list.get(i).getId() + " " + list.get(i).getTitle() + " " + list.get(i).getDescription()
-                    + " " + list.get(i).getAuthor() + " " + list.get(i).getIsbn() + " " + list.get(i).getYear() + " "
-                    + list.get(i).getReadAlready());
+        for (BookshelfEntity aList : list) {
+            logger.info(aList.getId() + " " + aList.getTitle() + " " + aList.getDescription()
+                    + " " + aList.getAuthor() + " " + aList.getIsbn() + " " + aList.getYear() + " "
+                    + aList.getReadAlready());
         }
         return list;
+
     }
 
     public void deleteBook(int id) {
@@ -165,7 +149,7 @@ public class BookDaoImpl implements BookDao {
         BookshelfEntity book = null;
         try {
             Session session = HibernateSessionFactory.getSessionFactory().openSession();
-            book = (BookshelfEntity) session.load(BookshelfEntity.class, id);
+            book = session.load(BookshelfEntity.class, id);
             if (book != null) {
                 session.remove(book);
                 tx = session.beginTransaction();

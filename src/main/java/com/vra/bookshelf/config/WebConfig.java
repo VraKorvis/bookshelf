@@ -19,7 +19,7 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
 @Configuration
-@ComponentScan(basePackages = "com.vra.bookshelf.controller")
+@ComponentScan(basePackages = {"com.vra.bookshelf.controller", "com.vra.bookshelf.model", "com.vra.bookshelf.dao"})
 @EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 

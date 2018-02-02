@@ -85,7 +85,7 @@
     <!--/*@thymesVar id="book" type="com.vra.bookshelf.entity.BookshelfEntity"*/-->
     <form action="#" th:action="@{'/books/addBook'+${pid}}" th:object="${book}" method="post">
         <div>
-            <label th:for="id">ID</label>
+            <!--<label th:for="id">ID</label>-->
             <input id="id" type="hidden" name="id" th:field="${book.id}"/>
             <span class="error1" th:if="${#fields.hasErrors('id')}" th:each="err : ${#fields.errors('id')}"
                   th:text="${err}">Input is incorrect</span>

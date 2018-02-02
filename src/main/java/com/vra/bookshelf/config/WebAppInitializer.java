@@ -9,13 +9,13 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
-// выполняется при запуске
+// выполняется при запуске, вся магия тут
 public class WebAppInitializer implements WebApplicationInitializer {
 
     public void onStartup(ServletContext servletContext) throws ServletException {
         // раньше был в мейне
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.register(SpringConfig.class, WebConfig.class);
+        context.register(WebConfig.class);
         context.setServletContext(servletContext);
 
         // создаем диспатчер-сервелет
