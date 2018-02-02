@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="connection.url"><![CDATA[jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8]]></property>
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+
+        <!-- куда то пропадает постоянно-->
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">root</property>
+        <!--автокоммит-->
+        <!--<property name="hibernate.connection.autocommit">true</property>-->
+
+        <!-- без след 2ух строчек не работает-->
+        <property name="hibernate.temp.use_jdbc_metadata_defaults">value="false"</property>
+        <property name="hibernate.jdbc.lob.non_contextual_creation">value="false"</property>
+
+        <!--пишутся ???,без кодировки(решение?!)-->
+        <property name="hibernate.connection.CharSet">utf8</property>
+        <property name="hibernate.connection.characterEncoding">utf8</property>
+        <property name="hibernate.connection.useUnicode">true</property>
+
+        <mapping class="com.vra.bookshelf.entity.BookshelfEntity"/>
+        <mapping class="com.vra.bookshelf.entity.BookshelfEntity"/>
+        <!--<mapping resource="com/vra/bookshelf/entity/BookshelfEntity.hbm.xml"/>-->
+
+        <!-- DB schema will be updated if needed -->
+        <!-- <property name="hbm2ddl.auto">update</property> -->
+    </session-factory>
+</hibernate-configuration>

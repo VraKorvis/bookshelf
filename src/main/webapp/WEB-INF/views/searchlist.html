@@ -1,0 +1,116 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8"/>
+    <script th:src="@{'/js/readalready.js'}"></script>
+
+    <title>Bookshelf</title>
+
+    <style type="text/css">
+        .error {
+            font-size: 14px;
+            font-weight: normal;
+            color: #ff3835;
+        }
+
+        .error1 {
+            font-size: 11px;
+            font-weight: normal;
+            color: #ff3835;
+        }
+
+        table {
+            font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+            font-size: 14px;
+            background: white;
+            max-width: 70%;
+            width: 70%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            /*border: 1px solid #ccc; !* Параметры рамки *!*/
+            font-weight: normal;
+            color: #039;
+            border-bottom: 2px solid #6678b1;
+            /*padding: 10px 8px;*/
+        }
+
+        td {
+            border: 1px solid #ccc; /* Параметры рамки */
+            border-bottom: 1px solid #ccc;
+            color: #669;
+            /*padding: 9px 8px;*/
+            transition: .3s linear;
+        }
+
+        tr:hover td {
+            color: #6699ff;
+        }
+
+        span {
+            font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+            font-size: 14px;
+            background: white;
+            max-width: 70%;
+            width: 70%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+    </style>
+
+</head>
+<body>
+    <!--/*@thymesVar id="books" type="com.vra.bookshelf.entity.BookshelfEntity"*/-->
+    <div th:if="${!books.isEmpty()}"><h1>Найдено: </h1></div>
+    <div th:if="${#lists.isEmpty(books)}"><h1>Ничего не нашлось, измените параметры поиска</h1></div>
+<br/><br/>
+<div>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Автор</th>
+            <th>ISBN</th>
+            <th>Год издания</th>
+            <th>Прочитано</th>
+            <th></th>
+            <th></th>
+        </tr>
+
+        <tr th:each="book: ${books}">
+            <td th:utext="${book.id}">...</td>
+            <td th:utext="${book.title}">...</td>
+            <td th:utext="${book.description}">...</td>
+            <td th:utext="${book.author}">...</td>
+            <td th:utext="${book.isbn}">...</td>
+            <td th:utext="${book.year}">...</td>
+
+            <td th:if="${book.readAlready}">
+                <img th:src="@{'/images/tick64.png'}" width="30" height="30">
+            </td>
+            <td th:unless="${book.readAlready}">
+                <a th:href="@{'/books/currPage'+${currPage}+'/readalready'+${book.id}}">
+                    <img th:src="@{'/images/nottick64.png'}" width="30" height="30"></a>
+            </td>
+            <!--вариант js jquery, подумать-->
+
+            <!--edit/delete-->
+            <td><a th:href="@{'/books/currPage'+${currPage}+'/edit'+${book.id}}">
+                <img th:src="@{'/images/pencil.png'}" width="30" height="30"></a>
+            </td>
+            <td><a th:href="@{'/books/currPage'+${currPage}+'/delete'+${book.id}}">
+                <img th:src="@{'/images/dagger.png'}" width="30" height="30"></a>
+            </td>
+        </tr>
+    </table>
+
+    <!--кнопка назад-->
+    <form action="#" th:action="@{'/books/page'+${pid}}" method="get">
+        <input type="submit" value="Назад"/>
+    </form>
+
+</div>
+</body>
+</html>

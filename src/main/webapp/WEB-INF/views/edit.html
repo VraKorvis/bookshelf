@@ -1,0 +1,136 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Bookshelf</title>
+    <style type="text/css">
+        .error {
+            font-size: 14px;
+            font-weight: normal;
+            color: #ff3835;
+        }
+
+        .error1 {
+            font-size: 11px;
+            font-weight: normal;
+            color: #ff3835;
+        }
+
+        table {
+            font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+            font-size: 14px;
+            background: white;
+            max-width: 70%;
+            width: 70%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            /*border: 1px solid #ccc; !* Параметры рамки *!*/
+            font-weight: normal;
+            color: #039;
+            border-bottom: 2px solid #6678b1;
+            /*padding: 10px 8px;*/
+        }
+
+        td {
+            border: 1px solid #ccc; /* Параметры рамки */
+            border-bottom: 1px solid #ccc;
+            color: #669;
+            /*padding: 9px 8px;*/
+            transition: .3s linear;
+        }
+
+        tr:hover td {
+            color: #6699ff;
+        }
+
+        span {
+            font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+            font-size: 14px;
+            background: white;
+            max-width: 70%;
+            width: 70%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<h1>Add/Update Book</h1>
+<br/><br/>
+<div>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>description</th>
+            <th>author</th>
+            <th>ISBN</th>
+            <th>Year</th>
+            <th>readAlready</th>
+        </tr>
+
+        <!--/*@thymesVar id="books" type="com.vra.bookshelf.entity.BookshelfEntity"*/-->
+        <tr>
+            <td th:utext="${book.title}">...</td>
+            <td th:utext="${book.description}">...</td>
+            <td th:utext="${book.author}">...</td>
+            <td th:utext="${book.isbn}">...</td>
+            <td th:utext="${book.year}">...</td>
+            <td th:utext="${book.readAlready}">...</td>
+        </tr>
+    </table>
+
+    <!--форма добавления c dаллидацией на корректность вводимых данных pid - номер страницы-->
+    <!--/*@thymesVar id="book" type="com.vra.bookshelf.entity.BookshelfEntity"*/-->
+    <form action="#" th:action="@{'/books/addBook'+${pid}}" th:object="${book}" method="post">
+        <div>
+            <label th:for="id">ID</label>
+            <input id="id" type="hidden" name="id" th:field="${book.id}"/>
+            <span class="error1" th:if="${#fields.hasErrors('id')}" th:each="err : ${#fields.errors('id')}"
+                  th:text="${err}">Input is incorrect</span>
+        </div>
+        <div>
+            <label th:for="title">Title</label>
+            <input id="title" type="text" name="Title" placeholder="Название книги" required th:field="${book.title}"/>
+            <span class="error1" th:if="${#fields.hasErrors('title')}" th:each="err : ${#fields.errors('title')}"
+                  th:text="${err}">Input is incorrect</span>
+        </div>
+        <div>
+            <label th:for="desc">Description</label>
+            <input id="desc" type="text" name="Description" placeholder="Описание" required th:field="${book.description}">
+            <span class="error1" th:if="${#fields.hasErrors('description')}" th:each="err : ${#fields.errors('description')}"
+                  th:text="${err}">Input is incorrect</span>
+        </div>
+        <div>
+            <label th:for="author">Author</label>
+            <input id="author" type="text" name="Author" placeholder="Автор" required th:field="${book.author}"/>
+            <span class="error1" th:if="${#fields.hasErrors('author')}" th:each="err : ${#fields.errors('author')}"
+                  th:text="${err}">Input is incorrect</span>
+        </div>
+        <div>
+            <label th:for="isbn"> ISBN </label>
+            <input id="isbn" type="number" name="ISBN" placeholder="ISBN" required
+                   th:field="*{isbn}" th:errorclass="error"/>
+            <span class="error1" th:if="${#fields.hasErrors('isbn')}" th:each="err : ${#fields.errors('isbn')}"
+                  th:text="${err}">Input is incorrect</span>
+        </div>
+        <div><label th:for="year">Year</label>
+            <input id="year" type="number" name="Title" placeholder="Год" required th:field="${book.year}"/>
+            <span class="error1" th:if="${#fields.hasErrors('year')}" th:each="err : ${#fields.errors('year')}"
+                  th:text="${err}">Input is incorrect</span>
+        </div>
+        <div>
+            <input type="submit" value="Изменить"/>
+            <input type="reset" value="Сбросить"/>
+        </div>
+    </form>
+
+    <!--кнопка назад-->
+    <form action="#" th:action="@{'/books/page'+${pid}}" method="get">
+        <input type="submit" value="Назад"/>
+    </form>
+
+</div>
+</body>
+</html>

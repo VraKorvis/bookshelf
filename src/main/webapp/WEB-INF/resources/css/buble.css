@@ -1,0 +1,27 @@
+.bubblewrap {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.bubblewrap li {
+    display: inline;
+    width: 60px;
+    height: 50px;
+}
+
+.bubblewrap li img {
+    width: 50px; /* Ширина каждого изображения */
+    height: 50px; /* Высота каждого изображения */
+    border: 0;
+    margin-right: 22px; /* Расстояние между изображениями */
+    -moz-transition: -moz-transform 0.1s ease-in; /* animate transform property */
+    -webkit-transition: -webkit-transform 0.1s ease-in;
+    -o-transition: -o-transform 0.1s ease-in; /* animate transform property in Opera */
+}
+
+.bubblewrap li img:hover {
+    -moz-transform: scale(1.8); /* масштабировать до 1.8x */
+    -webkit-transform: scale(1.8);
+    -o-transform: scale(1.8);
+}
