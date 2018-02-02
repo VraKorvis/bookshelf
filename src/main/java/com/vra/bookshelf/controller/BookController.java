@@ -27,15 +27,25 @@ public class BookController {
     public String search(@PathVariable(value = "pid") int pid,
                          @RequestParam(value = "search") String s,
                          @RequestParam(value = "isRead") String isRead,
-                         Model model){
+                         @RequestParam(value = "after", defaultValue = "0") String after,
+                         @RequestParam(value = "before", defaultValue = "3000") String before,
+                         Model model) {
         List<String> search = new ArrayList<String>();
         search.add(s);
+        System.out.println(isRead);
+        System.out.println(after);
+        System.out.println(before);
+
+
         search.add(isRead);
+        search.add(after);
+        search.add(before);
         model.addAttribute("books", bookService.findBook(search));
         model.addAttribute("pid", pid);
         model.addAttribute("currPage", pid);
         return "searchlist";
     }
+
     // обрабатывает get запрос по адресу /
     // то есть по адресу http://localhost:8887/ откроется bookshelf.jsp (возвращаем имя jsp)
     @GetMapping(value = "/")
@@ -73,7 +83,7 @@ public class BookController {
                            @ModelAttribute("book") @Valid BookshelfEntity book,
                            BindingResult bindingResult,
                            Model model) {
-        if (!bindingResult.hasErrors()){
+        if (!bindingResult.hasErrors()) {
             model.addAttribute("book", bookService.getBookById(id));
         }
         return "edit";
@@ -81,8 +91,8 @@ public class BookController {
 
     @GetMapping(value = "/books/currPage{pid}/readalready{id}")
     public String changeReady(@PathVariable(value = "id") Integer id,
-                           @PathVariable(value = "pid") Integer pid,
-                           Model model) {
+                              @PathVariable(value = "pid") Integer pid,
+                              Model model) {
         bookService.changeReadAlready(id);
         return "redirect:/books/page" + pid;
     }
@@ -95,7 +105,7 @@ public class BookController {
         if (bindingResult.hasErrors()) {
             return "edit";
         }
-      //  System.out.println("Нет ошибки");
+        //  System.out.println("Нет ошибки");
         bookService.addBook(book);
         return "redirect:/books/page" + pid;
 

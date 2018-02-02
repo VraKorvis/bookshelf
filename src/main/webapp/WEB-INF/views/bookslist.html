@@ -71,13 +71,16 @@
             <td><label th:for="search">Найти</label></td>
             <td><input id="search" type="text" name="search" placeholder="Найти"></td>
         </tr>
-        <label style="font-size: small" for="search">Книга прочитана?</label>
+        <label style="font-size: small" th:for="search">Книга прочитана?</label>
         <select th:name="isRead">
-            <option value="">Не учитывать</option>
-            <option value="true">Да</option>
-            <option value="false">Нет</option>
+            <option value="e" th:selected="selected">Не учитывать</option>
+            <option th:id="isRead" th:name="isRead" value="true" >Да</option>
+            <option th:id="isRead" th:name="isRead" value="false">Нет</option>
         </select>
-        <label style="font-size: small" for="search">Год издания</label>
+        <label style="font-size: small" >Год издания</label>
+        <input th:id="after" type="number" th:name="after" placeholder="После" th:default="0">
+        <input th:id="before" type="number" th:name="before" placeholder="До" th:default="3000">
+
 
         <div>
             <input type="submit" value="Найти"/>

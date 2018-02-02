@@ -95,6 +95,7 @@ public class BookDaoImpl implements BookDao {
         logger.info("Book was successfully updated: " + book);
     }
 
+    // сделать прочитанной
     public void toDoIsRead(Integer id) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
 
@@ -114,16 +115,41 @@ public class BookDaoImpl implements BookDao {
     @SuppressWarnings("unchecked")
     public List<BookshelfEntity> findBook(List<String> search) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
-        Query query = null;
 
-        if (search.get(1).equals("true") || search.get(1).equals("false")) {
-            query = session.createQuery("FROM BookshelfEntity where (title=:paramTitle) and readAlready=:paramIsRead");
-            query.setParameter("paramIsRead", Boolean.valueOf(search.get(1)));
-        }else{
-            query = session.createQuery("FROM BookshelfEntity where (title=:paramTitle)");
+        final String text = search.get(0);
+        final String isRead = search.get(1);
+        final int after = Integer.parseInt(search.get(2));
+        final int before = Integer.parseInt(search.get(3));
 
+        StringBuilder hql = new StringBuilder("FROM BookshelfEntity where year between :after and :before ");
+
+        // Query wqq = session.createQuery("FROM BookshelfEntity where year between :after and :before and readAlready=:tr and title=:text");
+        boolean isR;
+        if (!isRead.equals("e")) {
+            isR = Boolean.valueOf(isRead);
+            if (text.equals("")) {
+                hql.append("and readAlready=:isR");
+            } else {
+                hql.append("and readAlready=:isR and title=:text");
+            }
+        } else {
+            if (!text.equals("")) {
+                hql.append("and title=:text");
+            }
         }
-        query.setParameter("paramTitle", search.get(0));
+
+        Query query = session.createQuery(hql.toString());
+        query.setParameter("before", before);
+        query.setParameter("after", after);
+
+        if (!text.equals("")){
+            query.setParameter("text", text);
+        }
+        if (!isRead.equals("e")){
+            isR = Boolean.valueOf(isRead);
+            query.setParameter("isR", isR);
+        }
+
         List<BookshelfEntity> list = query.getResultList();
 
         for (int i = 0; i < list.size(); i++) {
