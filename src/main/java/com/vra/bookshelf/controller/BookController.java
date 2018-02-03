@@ -25,10 +25,10 @@ public class BookController {
 
     @RequestMapping(value = "/books/search{pid}", method = {RequestMethod.POST, RequestMethod.GET})
     public String search(@PathVariable(value = "pid") int pid,
-                         @RequestParam(value = "search") String s,
-                         @RequestParam(value = "isRead") String isRead,
-                         @RequestParam(value = "after", defaultValue = "0") String after,
-                         @RequestParam(value = "before", defaultValue = "2500") String before,
+                         @RequestParam(value = "search", defaultValue = "") String s,
+                         @RequestParam(value = "isRead", defaultValue = "notSelected") String isRead,
+                         @RequestParam(value = "after", defaultValue = "noLimit") String after,
+                         @RequestParam(value = "before", defaultValue = "noLimit") String before,
                          Model model) {
         List<String> search = new ArrayList<String>();
         search.add(s);

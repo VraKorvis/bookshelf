@@ -17,9 +17,9 @@
             <td><label th:for="search">Найти</label></td>
             <td><input id="search" type="text" name="search" placeholder="Найти"></td>
         </tr>
-        <label style="font-size: small" th:for="search">Книга прочитана?</label>
+        <label style="font-size: small" th:for="isRead">Книга прочитана?</label>
         <select th:name="isRead">
-            <option value="e" th:selected="selected">Не учитывать</option>
+            <option value="notSelected" th:selected="selected">Не учитывать</option>
             <option th:id="isRead" th:name="isRead" value="true" >Да</option>
             <option th:id="isRead" th:name="isRead" value="false">Нет</option>
         </select>
@@ -124,7 +124,7 @@
                   th:text="${err}">Input is incorrect</span>
         </div>
         <div>
-            <input type="submit" value="Изменить"/>
+            <input type="submit" value="Добавить"/>
             <input type="reset" value="Сбросить"/>
         </div>
     </form>

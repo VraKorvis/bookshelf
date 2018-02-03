@@ -5,11 +5,10 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-//разобрать что тут происходит
+
 //Для работы с hibernate используется реализация интерфейса SessionFactory.
-// Отметьте себе, что она создается один раз для приложения!
-//Есть несколько примеров как создается реализация sessionFactory.
-// Здесь показана реализация из официального мануала jboss.org,
+//один из способов реализации sessionFactory.
+// пример из документации jboss.org,
 // с добавлением геттера и метода по завершению подключения:
 
 public class HibernateSessionFactory {
@@ -22,12 +21,12 @@ public class HibernateSessionFactory {
                 .configure() // configures settings from hibernate.cfg.xml
                 .build();
         try {
-            sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+            sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
         }
         catch (Exception e) {
             // The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
             // so destroy it manually.
-            StandardServiceRegistryBuilder.destroy( registry );
+            StandardServiceRegistryBuilder.destroy(registry);
 
             throw new ExceptionInInitializerError("Initial SessionFactory failed" + e);
         }

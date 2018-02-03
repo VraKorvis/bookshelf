@@ -5,6 +5,7 @@ import com.vra.bookshelf.entity.BookshelfEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -24,11 +25,7 @@ public class BookServiceImpl implements BookService {
     }
 
     //количество страниц для пейджинга
-    public int getCountOfPages() {
-//        System.out.println(bookDao.getCountOfRecords());
-//        System.out.println(Math.ceil(((double) bookDao.getCountOfRecords())/10));
-        return (int)(Math.ceil(((double)bookDao.getCountOfRecords())/10));
-    }
+    public int getCountOfPages() { return (int)(Math.ceil(((double)bookDao.getCountOfRecords())/10)); }
 
     //сделать книгу прочитанной
     public void changeReadAlready(Integer id) {
@@ -37,6 +34,10 @@ public class BookServiceImpl implements BookService {
 
     //cписок найденных
     public List<BookshelfEntity> findBook(List<String> search) {
+        if (search.get(0).equals("") && search.get(1).equals("notSelected")
+                && search.get(2).equals("noLimit") && search.get(3).equals("noLimit")){
+            return Collections.emptyList();
+        }
         return bookDao.findBook(search);
     }
 
@@ -58,7 +59,5 @@ public class BookServiceImpl implements BookService {
     public BookshelfEntity getBookById(int id) {
         return bookDao.getBookById(id);
     }
-
-
 
 }

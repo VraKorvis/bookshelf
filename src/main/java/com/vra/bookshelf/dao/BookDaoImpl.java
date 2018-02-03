@@ -84,7 +84,7 @@ public class BookDaoImpl implements BookDao {
 
 //        Query query = session.createQuery("FROM BookshelfEntity where year between :after and :before and title=:text or author=:text");
 
-        if (!isRead.equals("e")){
+        if (!isRead.equals("notSelected")){
             hql.append("and readAlready=:isR");
         }
         if (!text.equals("")){
@@ -96,13 +96,11 @@ public class BookDaoImpl implements BookDao {
         if (!text.equals("")){
             query.setParameter("text","%"+ text+"%");
         }
-        if (!isRead.equals("e")){
+        if (!isRead.equals("notSelected")){
            boolean isR = Boolean.valueOf(isRead);
             query.setParameter("isR", isR);
         }
-//        int firstResult = (pid - 1) * 10;
-//        query.setFirstResult(firstResult)
-//                .setMaxResults(10);
+
         List<BookshelfEntity> list = query.getResultList();
 
         for (BookshelfEntity aList : list) {

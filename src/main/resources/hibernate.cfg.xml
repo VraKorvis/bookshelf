@@ -15,7 +15,7 @@
         <!--автокоммит-->
         <!--<property name="hibernate.connection.autocommit">true</property>-->
 
-        <!-- без след 2ух строчек не работает-->
+        <!-- -->
         <!--<property name="hibernate.temp.use_jdbc_metadata_defaults">value="false"</property>-->
         <!--<property name="hibernate.jdbc.lob.non_contextual_creation">value="false"</property>-->
         <property name="hibernate.current_session_context_class">thread</property>

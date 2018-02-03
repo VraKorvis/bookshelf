@@ -29,7 +29,7 @@
         </tr>
     </table>
 
-    <!--форма добавления c dаллидацией на корректность вводимых данных pid - номер страницы-->
+    <!--форма добавления c валлидацией на корректность вводимых данных pid - номер страницы-->
     <!--/*@thymesVar id="book" type="com.vra.bookshelf.entity.BookshelfEntity"*/-->
     <form action="#" th:action="@{'/books/addBook'+${pid}}" th:object="${book}" method="post">
         <div>
