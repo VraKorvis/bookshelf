@@ -25,14 +25,17 @@ public class BookServiceImpl implements BookService {
 
     //количество страниц для пейджинга
     public int getCountOfPages() {
-        return (int)(Math.ceil(bookDao.getCountOfRecords()/10));
+//        System.out.println(bookDao.getCountOfRecords());
+//        System.out.println(Math.ceil(((double) bookDao.getCountOfRecords())/10));
+        return (int)(Math.ceil(((double)bookDao.getCountOfRecords())/10));
     }
 
-    //сделать прочитанной
+    //сделать книгу прочитанной
     public void changeReadAlready(Integer id) {
         bookDao.toDoIsRead(id);
     }
 
+    //cписок найденных
     public List<BookshelfEntity> findBook(List<String> search) {
         return bookDao.findBook(search);
     }

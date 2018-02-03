@@ -7,7 +7,7 @@
     <!--указываем пакет для сканирования-->
     <!--<context:component-scan base-package="com.vra.bookshelf"/>-->
 
-    <!--инициализируем InternalResourceViewResolver, который отвечайте за показ View в нашем случае это jsp страницы.-->
+    <!--инициализируем InternalResourceViewResolver, который отвечайте за показ View-->
     <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
         <!--<property name="prefix" value="/WEB-INF/pages/"/>-->
         <!--<property name="suffix" value=".jsp"/>-->
@@ -21,7 +21,5 @@
     <!--</bean>-->
 
     <!--информация о database-->
-    <!--<bean>-->
-    <!--</bean>-->
 
 </beans>

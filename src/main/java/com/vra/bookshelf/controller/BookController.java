@@ -23,12 +23,12 @@ public class BookController {
     @Autowired
     public BookService bookService;
 
-    @PostMapping(value = "/books/search{pid}")
+    @RequestMapping(value = "/books/search{pid}", method = {RequestMethod.POST, RequestMethod.GET})
     public String search(@PathVariable(value = "pid") int pid,
                          @RequestParam(value = "search") String s,
                          @RequestParam(value = "isRead") String isRead,
                          @RequestParam(value = "after", defaultValue = "0") String after,
-                         @RequestParam(value = "before", defaultValue = "3000") String before,
+                         @RequestParam(value = "before", defaultValue = "2500") String before,
                          Model model) {
         List<String> search = new ArrayList<String>();
         search.add(s);
@@ -36,14 +36,17 @@ public class BookController {
         search.add(after);
         search.add(before);
 
-        model.addAttribute("books", bookService.findBook(search));
-        model.addAttribute("pid", pid);
-        model.addAttribute("currPage", pid);
+        //отображаем найденные
+        List<BookshelfEntity> listOfFindBooks = bookService.findBook(search);
+        model.addAttribute("books", listOfFindBooks);
+        int countOfPages = (int) (Math.ceil(((double) listOfFindBooks.size()) / 10));
+
+        addAttrForPagination(pid, model, countOfPages);
         return "searchlist";
     }
 
     // обрабатывает get запрос по адресу /
-    // то есть по адресу http://localhost:8887/ откроется bookshelf.jsp (возвращаем имя jsp)
+    // то есть по адресу http://localhost:8887/ откроется bookslist.html (возвращаем имя jsp, html)
     @GetMapping(value = "/")
     public String bookshelf() {
         return "redirect:/books/page1";
@@ -56,10 +59,17 @@ public class BookController {
         model.addAttribute("book", new BookshelfEntity());   // чтобы поля на форме были пустыми
         int countOfPages = bookService.getCountOfPages();
         model.addAttribute("books", bookService.getListBookByPid(pid));     // 10 записей (pid=1:1-10, pid=2:10-20)
-        model.addAttribute("countOfPages", countOfPages); // количество страниц (размер BD/10)
-        model.addAttribute("currPage", pid); //текущая стр
 
-        //вынести в отдельный метод
+        addAttrForPagination(pid, model, countOfPages);
+        return "bookslist";
+    }
+
+    //добавляем аттрибуты пейджинга в модель для методов getAllBooks and search
+    private void addAttrForPagination(int pid, Model model, int countOfPages) {
+       // System.out.println(countOfPages);
+        model.addAttribute("countOfPages", countOfPages); // количество страниц (размер BD/10)
+        model.addAttribute("pid", pid);
+        model.addAttribute("currPage", pid); //текущая стр
         if (pid == 1) {
             model.addAttribute("prevPage", pid);
         } else {
@@ -70,7 +80,6 @@ public class BookController {
         } else {
             model.addAttribute("nextPage", pid + 1);
         }
-        return "bookslist";
     }
 
     @GetMapping(value = "/books/currPage{pid}/edit{id}")
@@ -87,8 +96,7 @@ public class BookController {
 
     @GetMapping(value = "/books/currPage{pid}/readalready{id}")
     public String changeReady(@PathVariable(value = "id") Integer id,
-                              @PathVariable(value = "pid") Integer pid,
-                              Model model) {
+                              @PathVariable(value = "pid") Integer pid) {
         bookService.changeReadAlready(id);
         return "redirect:/books/page" + pid;
     }
@@ -97,7 +105,7 @@ public class BookController {
     @PostMapping(value = "/books/addBook{pid}")
     public String addBook(@PathVariable(value = "pid") Integer pid,
                           @ModelAttribute("book") @Valid BookshelfEntity book,
-                          BindingResult bindingResult, Model model) {
+                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "edit";
         }
@@ -108,9 +116,8 @@ public class BookController {
     }
 
     @GetMapping(value = "/books/currPage{pid}/delete{id}")
-    public String deleteBook(@PathVariable(value = "id") Integer id,
-                             @PathVariable(value = "pid") Integer pid,
-                             Model model) {
+    public String deleteBook(@PathVariable(value = "id") int id,
+                             @PathVariable(value = "pid") int pid) {
         bookService.deleteBook(id);
         return "redirect:/books/page" + pid;
     }
@@ -121,15 +128,6 @@ public class BookController {
 //    If type of the argument has a special meaning. For example, if your domain object passed as attribute extends
 // java.security.Principal, you need to annotate it, otherwise Spring will pass a result of HttpServletRequest.getUserPrincipal() instead.
 //    Some people tend to use @ModelAttribute without actual need in order to document the meaning of arguments.
-//
-//    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "action=save")
-//    public ModelAndView save() {
-//        return null;
-//    }
-//
-//    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "action=cancel")
-//    public ModelAndView cancel() {
-//        return null;
-//    }
+
 
 }
